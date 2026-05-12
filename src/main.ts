@@ -1,6 +1,7 @@
 import './ui/styles.css';
 import { adapters } from './adapters';
 import { loadConfig, saveConfig } from './config';
+import { fetchFundingRows } from './funding/live';
 import { rankOpportunities } from './lib/ranker';
 import { isAdapterActive } from './lib/venues';
 import { Poller } from './poller';
@@ -17,7 +18,9 @@ if (!app) throw new Error('#app missing');
 
 let config = loadConfig(adapters.map((adapter) => adapter.venue));
 let viewMode: ViewMode = 'spot';
-const fundingRows: FundingRow[] = [];
+let fundingRows: FundingRow[] = [];
+let fundingTimer: ReturnType<typeof setInterval> | null = null;
+let fundingController: AbortController | null = null;
 const store = new BookStore(adapters.map((adapter) => adapter.venue));
 const poller = new Poller(adapters, store, () => config);
 
@@ -40,7 +43,10 @@ function updateConfig(next: typeof config, restart = false): void {
   saveConfig(config);
   renderControls(controls, config, adapters, updateConfig);
   render();
-  if (restart) poller.restart();
+  if (restart) {
+    poller.restart();
+    restartFundingPoller();
+  }
 }
 
 function render(): void {
@@ -74,7 +80,32 @@ function render(): void {
 function switchView(mode: ViewMode): void {
   viewMode = mode;
   renderViewTabs(tabs, viewMode, switchView);
+  void pollFundingOnce();
   render();
+}
+
+async function pollFundingOnce(): Promise<void> {
+  fundingController?.abort();
+  const controller = new AbortController();
+  fundingController = controller;
+  try {
+    fundingRows = await fetchFundingRows(controller.signal, {
+      timeoutMs: config.proxyTimeoutMs,
+      limit: config.topN,
+    });
+  } catch {
+    // Isolate funding failures: spot polling and the rest of the UI keep running.
+  } finally {
+    if (fundingController === controller) fundingController = null;
+    render();
+  }
+}
+
+function restartFundingPoller(): void {
+  if (fundingTimer !== null) clearInterval(fundingTimer);
+  fundingController?.abort();
+  fundingTimer = setInterval(() => void pollFundingOnce(), config.refreshIntervalMs);
+  void pollFundingOnce();
 }
 
 renderViewTabs(tabs, viewMode, switchView);
@@ -82,3 +113,4 @@ renderControls(controls, config, adapters, updateConfig);
 store.subscribe(render);
 render();
 poller.start();
+restartFundingPoller();
