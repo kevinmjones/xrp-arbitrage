@@ -13,7 +13,7 @@ export function renderControls(root: HTMLElement, config: Config, adapters: Venu
       <label class="field">Notional <select data-key="notionalUsd">${NOTIONAL_PRESETS.map((n) => `<option value="${n}" ${n === config.notionalUsd ? 'selected' : ''}>${usd(n)}</option>`).join('')}</select></label>
       <label class="field">Quote <select data-key="quote">${QUOTES.map((q) => `<option value="${q}" ${q === config.quote ? 'selected' : ''}>${q}</option>`).join('')}</select></label>
       <label class="field">Refresh <select data-key="refreshIntervalMs">${REFRESH_PRESETS.map((ms) => `<option value="${ms}" ${ms === config.refreshIntervalMs ? 'selected' : ''}>${ms / 1000}s</option>`).join('')}</select></label>
-      <label class="switch"><input type="checkbox" data-key="enableGlobalVenues" ${config.enableGlobalVenues ? 'checked' : ''}/><span>Global venues</span><small>${config.enableGlobalVenues ? 'tier 1+2' : `tier 1 only (${tier1})`}</small></label>
+      <label class="switch"><input type="checkbox" data-key="enableGlobalVenues" ${config.enableGlobalVenues ? 'checked' : ''}/><span>Global venues</span><small>${config.enableGlobalVenues ? 'TIER 1+2' : `TIER 1 ONLY (${tier1})`}</small></label>
     </div>
     <div class="section-label venue-heading">Venues <span>${activeCount}/${adapters.length} armed</span></div>
     <div class="venue-grid">${adapters.map((adapter) => {
