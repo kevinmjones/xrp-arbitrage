@@ -46,7 +46,7 @@ function render(): void {
       if (!config.selectedVenues[adapter.venue]) return false;
       if (!adapter.supportedQuotes.has(config.quote)) return false;
       if (!adapter.corsDirect && !config.enableGlobalVenues) return false;
-      if (['Binance', 'OKX', 'Bybit'].includes(adapter.venue) && !config.enableGlobalVenues) return false;
+      if (adapter.tier === 2 && !config.enableGlobalVenues) return false;
       return true;
     })
     .map((adapter) => adapter.venue));
@@ -60,7 +60,7 @@ function render(): void {
     hideMultiplier: config.hideMultiplier,
   });
   renderTable(table, rows, config);
-  renderStatus(status, store.getStates(), config);
+  renderStatus(status, store.getStates(), config, adapters);
 }
 
 renderControls(controls, config, adapters, updateConfig);

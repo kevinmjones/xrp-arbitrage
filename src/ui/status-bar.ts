@@ -7,7 +7,7 @@ export function renderStatus(root: HTMLElement, states: Map<string, VenueState>,
     if (!config.selectedVenues[adapter.venue]) return false;
     if (!adapter.supportedQuotes.has(config.quote)) return false;
     if (!adapter.corsDirect && !config.enableGlobalVenues) return false;
-    if (['Binance', 'OKX', 'Bybit'].includes(adapter.venue) && !config.enableGlobalVenues) return false;
+    if (adapter.tier === 2 && !config.enableGlobalVenues) return false;
     return true;
   });
   const visibleStates = adapters.length > 0
