@@ -75,3 +75,21 @@ export interface VenueState {
   error: string | null
   updatedAt: number | null
 }
+
+export type FundingStatus = 'ok' | 'stale' | 'error' | 'loading' | 'idle'
+
+export interface FundingRow {
+  symbol: string
+  venue: string
+  fundingBpsPer8h: number
+  annualizedPct: number
+  nextFundingMs: number | null
+  markIndexBasisBps: number | null
+  ageMs: number
+  status: FundingStatus
+}
+
+export interface FundingAdapter {
+  venue: string
+  fetchFunding(signal: AbortSignal): Promise<FundingRow[]>
+}
