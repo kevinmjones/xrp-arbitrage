@@ -1,0 +1,19 @@
+{
+  "retCode": 0,
+  "retMsg": "OK",
+  "result": {
+    "category": "linear",
+    "list": [
+      {
+        "symbol": "XRPUSDT",
+        "lastPrice": "2.5005",
+        "indexPrice": "2.4990",
+        "markPrice": "2.5010",
+        "fundingRate": "0.00007500",
+        "nextFundingTime": "1716828800000",
+        "openInterest": "1234567"
+      }
+    ]
+  },
+  "time": 1716800000000
+}
