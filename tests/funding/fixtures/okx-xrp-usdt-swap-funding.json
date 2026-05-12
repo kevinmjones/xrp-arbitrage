@@ -1,0 +1,16 @@
+{
+  "code": "0",
+  "msg": "",
+  "data": [
+    {
+      "instType": "SWAP",
+      "instId": "XRP-USDT-SWAP",
+      "fundingRate": "0.00009800",
+      "nextFundingRate": "0.00010200",
+      "fundingTime": "1716800000000",
+      "nextFundingTime": "1716828800000",
+      "minFundingRate": "-0.00375",
+      "maxFundingRate": "0.00375"
+    }
+  ]
+}
