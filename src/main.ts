@@ -2,6 +2,7 @@ import './ui/styles.css';
 import { adapters } from './adapters';
 import { loadConfig, saveConfig } from './config';
 import { rankOpportunities } from './lib/ranker';
+import { isAdapterActive } from './lib/venues';
 import { Poller } from './poller';
 import { BookStore } from './store';
 import { renderControls } from './ui/controls';
@@ -42,13 +43,7 @@ function render(): void {
     { makerBps: adapter.defaultMakerBps, takerBps: config.feeOverridesBps[adapter.venue] ?? adapter.defaultTakerBps },
   ]));
   const activeVenueSet = new Set(adapters
-    .filter((adapter) => {
-      if (!config.selectedVenues[adapter.venue]) return false;
-      if (!adapter.supportedQuotes.has(config.quote)) return false;
-      if (!adapter.corsDirect && !config.enableGlobalVenues) return false;
-      if (adapter.tier === 2 && !config.enableGlobalVenues) return false;
-      return true;
-    })
+    .filter((adapter) => isAdapterActive(adapter, config))
     .map((adapter) => adapter.venue));
   const rows = rankOpportunities({
     books: store.getBooks().filter((book) => book.quote === config.quote && activeVenueSet.has(book.venue)),

@@ -23,7 +23,7 @@ const adapter = (venue: string, options: Partial<VenueAdapter> = {}): VenueAdapt
   supportedQuotes: new Set(['USD']),
   defaultMakerBps: 0,
   defaultTakerBps: 40,
-  corsDirect: true,
+  tier: 1,
   fetchBook: vi.fn(),
   ...options,
 });
@@ -72,7 +72,7 @@ describe('UI rendering', () => {
       ['Binance', { status: 'error', error: 'boom', updatedAt: 10_000, book: null }],
     ]);
 
-    renderStatus(root, states, config, [adapter('Kraken'), adapter('Binance', { corsDirect: false })], 10_000);
+    renderStatus(root, states, config, [adapter('Kraken'), adapter('Binance', { tier: 2 })], 10_000);
 
     expect(root.textContent).toContain('1/1 fresh');
     expect(root.textContent).toContain('global off');

@@ -12,7 +12,7 @@ export function parseCoinbaseBook(payload: unknown, quote: Quote, fetchedAt: num
 }
 
 export const coinbaseAdapter: VenueAdapter = {
-  venue: 'Coinbase', supportedQuotes: SUPPORTED, defaultMakerBps: 60, defaultTakerBps: 120, corsDirect: true, tier: 1,
+  venue: 'Coinbase', supportedQuotes: SUPPORTED, defaultMakerBps: 60, defaultTakerBps: 120, tier: 1,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Coinbase', quote, SUPPORTED)
     const fetchedAt = Date.now()

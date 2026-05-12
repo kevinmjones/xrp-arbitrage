@@ -33,7 +33,7 @@ export function parseKrakenBook(payload: unknown, quote: Quote, fetchedAt: numbe
 }
 
 export const krakenAdapter: VenueAdapter = {
-  venue: 'Kraken', supportedQuotes: SUPPORTED, defaultMakerBps: 25, defaultTakerBps: 40, corsDirect: true, tier: 1,
+  venue: 'Kraken', supportedQuotes: SUPPORTED, defaultMakerBps: 25, defaultTakerBps: 40, tier: 1,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Kraken', quote, SUPPORTED)
     const fetchedAt = Date.now()

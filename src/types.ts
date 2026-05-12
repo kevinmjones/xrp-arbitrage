@@ -18,8 +18,7 @@ export interface VenueAdapter {
   supportedQuotes: ReadonlySet<Quote>
   defaultMakerBps: number
   defaultTakerBps: number
-  corsDirect: boolean
-  tier?: 1 | 2
+  tier: 1 | 2
   fetchBook(quote: Quote, signal: AbortSignal): Promise<OrderBook>
 }
 

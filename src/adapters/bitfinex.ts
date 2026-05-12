@@ -19,11 +19,13 @@ export function parseBitfinexBook(payload: unknown, quote: Quote, fetchedAt: num
 }
 
 export const bitfinexAdapter: VenueAdapter = {
-  venue: 'Bitfinex', supportedQuotes: SUPPORTED, defaultMakerBps: 0, defaultTakerBps: 0, corsDirect: true, tier: 1,
+  venue: 'Bitfinex', supportedQuotes: SUPPORTED, defaultMakerBps: 0, defaultTakerBps: 0, tier: 1,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Bitfinex', quote, SUPPORTED)
     const fetchedAt = Date.now()
-    const payload = await fetchJson(`https://api-pub.bitfinex.com/v2/book/${PAIRS[quote]}/P0?len=100`, signal, false)
+    // Bitfinex REST book is valid but omits Access-Control-Allow-Origin in the
+    // browser. Use the proxy chain while preserving the native REST parser.
+    const payload = await fetchJson(`https://api-pub.bitfinex.com/v2/book/${PAIRS[quote]}/P0?len=100`, signal, true)
     return parseBitfinexBook(payload, quote, fetchedAt)
   },
 }

@@ -1,5 +1,6 @@
 import type { Config, VenueAdapter } from './types';
 import { BookStore } from './store';
+import { activeAdapters } from './lib/venues';
 
 export class Poller {
   private timer: number | null = null;
@@ -35,13 +36,7 @@ export class Poller {
     const controller = new AbortController();
     this.controller = controller;
     const config = this.getConfig();
-    const active = this.adapters.filter((adapter) => {
-      if (!config.selectedVenues[adapter.venue]) return false;
-      if (!adapter.supportedQuotes.has(config.quote)) return false;
-      if (!adapter.corsDirect && !config.enableGlobalVenues) return false;
-      if (adapter.tier === 2 && !config.enableGlobalVenues) return false;
-      return true;
-    });
+    const active = activeAdapters(this.adapters, config);
 
     await Promise.allSettled(active.map(async (adapter) => {
       this.store.setLoading(adapter.venue);

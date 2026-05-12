@@ -14,7 +14,7 @@ export function parseOkxBook(payload: unknown, quote: Quote, fetchedAt: number):
 }
 
 export const okxAdapter: VenueAdapter = {
-  venue: 'OKX', supportedQuotes: SUPPORTED, defaultMakerBps: 8, defaultTakerBps: 10, corsDirect: true, tier: 2,
+  venue: 'OKX', supportedQuotes: SUPPORTED, defaultMakerBps: 8, defaultTakerBps: 10, tier: 2,
   async fetchBook(quote, signal) {
     assertSupportedQuote('OKX', quote, SUPPORTED)
     const fetchedAt = Date.now()

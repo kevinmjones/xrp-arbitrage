@@ -4,13 +4,28 @@ import { coinbaseAdapter } from './coinbase'
 import { bitstampAdapter } from './bitstamp'
 import { geminiAdapter } from './gemini'
 import { bitfinexAdapter } from './bitfinex'
+import { cryptoComAdapter } from './crypto-com'
+import { binanceUsAdapter } from './binance-us'
 import { binanceAdapter } from './binance'
 import { okxAdapter } from './okx'
 import { bybitAdapter } from './bybit'
+import { bitgetAdapter } from './bitget'
 
-export const tier1Adapters: VenueAdapter[] = [krakenAdapter, coinbaseAdapter, bitstampAdapter, geminiAdapter, bitfinexAdapter]
-export const tier2Adapters: VenueAdapter[] = [binanceAdapter, okxAdapter, bybitAdapter]
-export const adapters: VenueAdapter[] = [...tier1Adapters, ...tier2Adapters]
+export const adapters: VenueAdapter[] = [
+  krakenAdapter,
+  coinbaseAdapter,
+  bitstampAdapter,
+  geminiAdapter,
+  bitfinexAdapter,
+  cryptoComAdapter,
+  binanceUsAdapter,
+  binanceAdapter,
+  okxAdapter,
+  bybitAdapter,
+  bitgetAdapter,
+]
+export const tier1Adapters: VenueAdapter[] = adapters.filter((adapter) => adapter.tier === 1)
+export const tier2Adapters: VenueAdapter[] = adapters.filter((adapter) => adapter.tier === 2)
 
 export function getEnabledAdapters(options: { enableGlobalVenues: boolean }): VenueAdapter[] {
   return options.enableGlobalVenues ? adapters : tier1Adapters

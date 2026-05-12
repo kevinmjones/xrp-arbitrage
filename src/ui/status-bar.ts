@@ -1,15 +1,10 @@
 import type { Config, VenueAdapter, VenueState } from '../types';
+import { activeAdapters } from '../lib/venues';
 import { age } from './format';
 
 export function renderStatus(root: HTMLElement, states: Map<string, VenueState>, config: Config, adapters: VenueAdapter[] = [], now = Date.now()): void {
   const staleAfter = config.refreshIntervalMs * config.staleMultiplier;
-  const activeVenues = adapters.filter((adapter) => {
-    if (!config.selectedVenues[adapter.venue]) return false;
-    if (!adapter.supportedQuotes.has(config.quote)) return false;
-    if (!adapter.corsDirect && !config.enableGlobalVenues) return false;
-    if (adapter.tier === 2 && !config.enableGlobalVenues) return false;
-    return true;
-  });
+  const activeVenues = activeAdapters(adapters, config);
   const visibleStates = adapters.length > 0
     ? activeVenues.map((adapter) => [adapter.venue, states.get(adapter.venue) ?? { book: null, status: 'idle' as const, error: null, updatedAt: null }] as const)
     : [...states.entries()];

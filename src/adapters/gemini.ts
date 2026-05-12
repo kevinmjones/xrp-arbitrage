@@ -17,11 +17,13 @@ export function parseGeminiBook(payload: unknown, quote: Quote, fetchedAt: numbe
 }
 
 export const geminiAdapter: VenueAdapter = {
-  venue: 'Gemini', supportedQuotes: SUPPORTED, defaultMakerBps: 60, defaultTakerBps: 120, corsDirect: true, tier: 1,
+  venue: 'Gemini', supportedQuotes: SUPPORTED, defaultMakerBps: 60, defaultTakerBps: 120, tier: 1,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Gemini', quote, SUPPORTED)
     const fetchedAt = Date.now()
-    const payload = await fetchJson('https://api.gemini.com/v1/book/xrpusd?limit_bids=50&limit_asks=50', signal, false)
+    // Gemini's full-depth REST book is valid but does not send CORS headers from
+    // GitHub Pages. Keep it as a tier-1 venue, but fetch through the proxy chain.
+    const payload = await fetchJson('https://api.gemini.com/v1/book/xrpusd?limit_bids=50&limit_asks=50', signal, true)
     return parseGeminiBook(payload, quote, fetchedAt)
   },
 }

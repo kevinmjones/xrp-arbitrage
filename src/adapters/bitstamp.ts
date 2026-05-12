@@ -13,7 +13,7 @@ export function parseBitstampBook(payload: unknown, quote: Quote, fetchedAt: num
 }
 
 export const bitstampAdapter: VenueAdapter = {
-  venue: 'Bitstamp', supportedQuotes: SUPPORTED, defaultMakerBps: 30, defaultTakerBps: 40, corsDirect: true, tier: 1,
+  venue: 'Bitstamp', supportedQuotes: SUPPORTED, defaultMakerBps: 30, defaultTakerBps: 40, tier: 1,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Bitstamp', quote, SUPPORTED)
     const fetchedAt = Date.now()

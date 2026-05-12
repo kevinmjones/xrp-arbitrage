@@ -5,7 +5,7 @@ import { usd } from './format';
 type Change = (config: Config, restart?: boolean) => void;
 
 export function renderControls(root: HTMLElement, config: Config, adapters: VenueAdapter[], onChange: Change): void {
-  const tier1 = adapters.filter((adapter) => adapter.corsDirect && !['Binance', 'OKX', 'Bybit'].includes(adapter.venue)).length;
+  const tier1 = adapters.filter((adapter) => adapter.tier !== 2).length;
   const activeCount = adapters.filter((adapter) => config.selectedVenues[adapter.venue]).length;
   root.innerHTML = `
     <div class="section-label">Controls</div>
@@ -17,7 +17,7 @@ export function renderControls(root: HTMLElement, config: Config, adapters: Venu
     </div>
     <div class="section-label venue-heading">Venues <span>${activeCount}/${adapters.length} armed</span></div>
     <div class="venue-grid">${adapters.map((adapter) => {
-      const enabledByGlobal = adapter.corsDirect || config.enableGlobalVenues;
+      const enabledByGlobal = adapter.tier !== 2 || config.enableGlobalVenues;
       const enabledByQuote = adapter.supportedQuotes.has(config.quote);
       const unavailable = !enabledByGlobal || !enabledByQuote;
       const reason = !enabledByQuote ? `${config.quote} unsupported` : !enabledByGlobal ? 'global disabled' : `taker ${adapter.defaultTakerBps} bps`;

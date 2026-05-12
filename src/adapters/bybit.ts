@@ -13,11 +13,11 @@ export function parseBybitBook(payload: unknown, quote: Quote, fetchedAt: number
 }
 
 export const bybitAdapter: VenueAdapter = {
-  venue: 'Bybit', supportedQuotes: SUPPORTED, defaultMakerBps: 10, defaultTakerBps: 10, corsDirect: false, tier: 2,
+  venue: 'Bybit', supportedQuotes: SUPPORTED, defaultMakerBps: 10, defaultTakerBps: 10, tier: 2,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Bybit', quote, SUPPORTED)
     const fetchedAt = Date.now()
-    const payload = await fetchJson(`https://api.bybit.com/v5/market/orderbook?category=spot&symbol=${PAIRS[quote]}&limit=200`, signal, true)
+    const payload = await fetchJson(`https://api.bybit.com/v5/market/orderbook?category=spot&symbol=${PAIRS[quote]}&limit=200`, signal, false)
     return parseBybitBook(payload, quote, fetchedAt)
   },
 }

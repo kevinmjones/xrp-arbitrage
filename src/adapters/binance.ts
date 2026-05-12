@@ -12,11 +12,11 @@ export function parseBinanceBook(payload: unknown, quote: Quote, fetchedAt: numb
 }
 
 export const binanceAdapter: VenueAdapter = {
-  venue: 'Binance', supportedQuotes: SUPPORTED, defaultMakerBps: 10, defaultTakerBps: 10, corsDirect: false, tier: 2,
+  venue: 'Binance', supportedQuotes: SUPPORTED, defaultMakerBps: 10, defaultTakerBps: 10, tier: 2,
   async fetchBook(quote, signal) {
     assertSupportedQuote('Binance', quote, SUPPORTED)
     const fetchedAt = Date.now()
-    const payload = await fetchJson(`https://api.binance.com/api/v3/depth?symbol=${PAIRS[quote]}&limit=500`, signal, true)
+    const payload = await fetchJson(`https://api.binance.com/api/v3/depth?symbol=${PAIRS[quote]}&limit=500`, signal, false)
     return parseBinanceBook(payload, quote, fetchedAt)
   },
 }
